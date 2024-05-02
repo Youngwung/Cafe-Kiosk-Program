@@ -92,11 +92,11 @@ public class KioskDetailFrame extends JFrame {
 		// 구분이 힘드므로 initialize()메서드가 끝난 후 텍스트 필드에 정보를 채운다.
 		// initialize()메서드 끝나고 써야하는 이유는 텍스트필드들이 모두 new~~ 하고 초기화가 끝나야
 		// setText를 쓸수 있기 때문.
-		
 		Kiosk kiosk = dao.read(menuName);
 		textMenuName.setText(kiosk.getMenuName());
 		textPrice.setText(kiosk.getPrice()+"");
-		textPhoto.setText(kiosk.getPhoto().replace("imgs/", "").replace(".png", ""));
+		String s =System.getProperty("user.home") + "\\Desktop\\imgs\\kiosk\\";
+		textPhoto.setText(kiosk.getPhoto().replace(s, "").replace(".png", ""));
 		comboBox.setSelectedIndex(0);
 		if (kiosk.getType().toLowerCase().contains("ice")) {
 			comboBox.setSelectedIndex(0);
