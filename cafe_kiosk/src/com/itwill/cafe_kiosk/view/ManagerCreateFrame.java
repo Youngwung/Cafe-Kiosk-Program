@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import com.itwill.cafe_kiosk.controller.ManagerDao;
@@ -34,8 +35,8 @@ public class ManagerCreateFrame extends JFrame {
 	private JLabel lblName;
 	private JTextField textName;
 	private JTextField textId;
-	private JTextField textPassword;
-	private JTextField textPassword2;
+	private JPasswordField textPassword;
+	private JPasswordField textPassword2;
 	private JButton btnCreate;
 	
 	private ManagerDao dao = ManagerDao.getInstance();
@@ -112,7 +113,8 @@ public class ManagerCreateFrame extends JFrame {
 		lblPassword1.setBounds(12, 243, 146, 37);
 		contentPane.add(lblPassword1);
 		
-		textPassword = new JTextField();
+		textPassword = new JPasswordField();
+		textPassword.setEchoChar('*');
 		textPassword.setFont(new Font("굴림", Font.BOLD, 20));
 		textPassword.setColumns(10);
 		textPassword.setBounds(170, 243, 282, 37);
@@ -124,7 +126,8 @@ public class ManagerCreateFrame extends JFrame {
 		lblPassword1_1.setBounds(12, 315, 146, 37);
 		contentPane.add(lblPassword1_1);
 		
-		textPassword2 = new JTextField();
+		textPassword2 = new JPasswordField();
+		textPassword2.setEchoChar('*');
 		textPassword2.setFont(new Font("굴림", Font.BOLD, 20));
 		textPassword2.setColumns(10);
 		textPassword2.setBounds(170, 315, 282, 37);
@@ -162,13 +165,15 @@ public class ManagerCreateFrame extends JFrame {
 	private void createManager() {
 
 		List<Manager> list = dao.read();
+		String password = new String (textPassword.getPassword());
+		String Password2 = new String (textPassword2.getPassword());
 		for (Manager m : list) {
 			// 1. 널검사
 			boolean isNull = 
 					textName.getText().equals("")||
 					textId.getText().equals("")||
-					textPassword.getText().equals("")||
-					textPassword2.getText().equals("");
+					password.equals("")||
+					Password2.equals("");
 			if (isNull) {
 				JOptionPane.showMessageDialog(
 						contentPane, 
@@ -188,7 +193,7 @@ public class ManagerCreateFrame extends JFrame {
 				return;
 			}
 			// 3. 비밀번호 일치 검사 
-			if (!textPassword.getText().equals(textPassword2.getText())) {
+			if (!password.equals(Password2)) {
 				JOptionPane.showMessageDialog(
 						contentPane, 
 						"비밀번호가 일치하지 않습니다.",
@@ -202,7 +207,7 @@ public class ManagerCreateFrame extends JFrame {
 		// 3.계정 정보 db에 insert
 		String name = textName.getText();
 		String id = textId.getText();
-		String password = textPassword.getText();
+		// 패스워드는 이미 저장되어있음.
 		Manager manager = new Manager(name, id, password);
 		int result = dao.create(manager);
 		if (result != 0) {

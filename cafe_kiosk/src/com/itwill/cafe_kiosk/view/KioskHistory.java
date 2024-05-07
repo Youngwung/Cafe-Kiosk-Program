@@ -25,6 +25,7 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 public class KioskHistory extends JFrame {
 	DefaultTableCellRenderer celAlignCenter = new DefaultTableCellRenderer(); // 테이블의 셀정렬을 위한 객체 선언.
@@ -46,6 +47,8 @@ public class KioskHistory extends JFrame {
 	private KioskDao dao = KioskDao.getInstance();
 
 	private static final String[] COLUMN_NAMES = {"메뉴 이름", "판매수량", "가격", "매출"};
+	private JLabel lblTotal;
+	private JTextField textTotal;
 	/**
 	 * Launch the application.
 	 */
@@ -91,17 +94,20 @@ public class KioskHistory extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(null);
 		
 		lblHistory = new JLabel("판매 내역");
+		lblHistory.setBounds(5, 5, 614, 41);
 		lblHistory.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHistory.setFont(new Font("맑은 고딕", Font.BOLD, 30));
-		contentPane.add(lblHistory, BorderLayout.NORTH);
+		contentPane.add(lblHistory);
 		
 		panelBtn = new JPanel();
-		contentPane.add(panelBtn, BorderLayout.SOUTH);
+		panelBtn.setBounds(5, 429, 614, 107);
+		contentPane.add(panelBtn);
 		
 		btnDeleteTable = new JButton("테이블 삭제");
+		btnDeleteTable.setBounds(125, 54, 180, 43);
 		btnDeleteTable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				deleteHistoryTable();
@@ -109,10 +115,12 @@ public class KioskHistory extends JFrame {
 
 
 		});
+		panelBtn.setLayout(null);
 		btnDeleteTable.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		panelBtn.add(btnDeleteTable);
 		
 		JButton btnCancel = new JButton("닫기");
+		btnCancel.setBounds(353, 54, 96, 43);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -121,8 +129,21 @@ public class KioskHistory extends JFrame {
 		btnCancel.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		panelBtn.add(btnCancel);
 		
+		lblTotal = new JLabel("매출 합계:");
+		lblTotal.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		lblTotal.setBounds(196, 10, 96, 34);
+		panelBtn.add(lblTotal);
+		
+		textTotal = new JTextField();
+		textTotal.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		textTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+		textTotal.setBounds(292, 10, 157, 34);
+		panelBtn.add(textTotal);
+		textTotal.setColumns(10);
+		
 		scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
+		scrollPane.setBounds(5, 46, 614, 383);
+		contentPane.add(scrollPane);
 		
 		table = new JTable();
 		table.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
@@ -146,6 +167,8 @@ public class KioskHistory extends JFrame {
 		table.getColumn(COLUMN_NAMES[1]).setCellRenderer(celAlignCenter);
 		table.getColumn(COLUMN_NAMES[2]).setCellRenderer(celAlignCenter);
 		table.getColumn(COLUMN_NAMES[3]).setCellRenderer(celAlignCenter);
+		
+		setTotal(dao.readHistory()); // 매출 합계를 초기화하기 위한 메서드. 테이블이 업데이트 될 때 마다 매출합계도 업데이트
 	}
 	
 	private void deleteHistoryTable() {
@@ -157,5 +180,12 @@ public class KioskHistory extends JFrame {
 			app.deleteHistorySuccess();
 		} 
 	}
-
+	
+	private void setTotal(List<Kiosk> kiosks) {
+		int sum = 0 ;
+		for (Kiosk k : kiosks) {
+			sum += k.getPrice() * k.getCount();
+		}
+		textTotal.setText(sum + " 원");
+	}
 }

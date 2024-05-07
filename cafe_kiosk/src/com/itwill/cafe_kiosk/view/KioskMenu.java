@@ -356,11 +356,11 @@ public class KioskMenu extends JFrame {
 		for (Kiosk k : kiosks) {
 			// DB 테이블에서 검색한 레코드를 JTable에서 사용할 행(row) 데이터로 변환.
 			Object max = null;
-			if (dao.getCount(k.getMenuName()) == setMax(kiosks)) {
-				if (dao.getCount(k.getMenuName()) != 0) {
+			boolean isBest = dao.getCount(k.getMenuName()) == setMax(kiosks) && dao.getCount(k.getMenuName()) != 0;
+			if (isBest) {
 					max = "Best!";
-				} else max = dao.getCount(k.getMenuName());
 			} else {
+				//TODO 지금은 구매자한테 판매량까지 표시되는데 이건 표시 안하는게 나으려나
 				max = dao.getCount(k.getMenuName());
 			}
 			

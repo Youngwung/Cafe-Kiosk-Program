@@ -8,6 +8,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -26,7 +27,7 @@ public class KioskMain implements LoginNotify, MenuNotify, ManagerCreateNotify {
 
 	private JFrame frame;
 	private JTextField textId;
-	private JTextField textPassword;
+	private JPasswordField textPassword;
 	private JButton btnLogin;
 	private JButton btnSimpleLogin;
 	private JLabel lblManagerId;
@@ -88,7 +89,8 @@ public class KioskMain implements LoginNotify, MenuNotify, ManagerCreateNotify {
 		textId.setBounds(235, 186, 172, 33);
 		textId.setColumns(10);
 		
-		textPassword = new JTextField();
+		textPassword = new JPasswordField();
+		textPassword.setEchoChar('*');
 		textPassword.setBounds(235, 229, 172, 33);
 		textPassword.setColumns(10);
 		
@@ -96,11 +98,12 @@ public class KioskMain implements LoginNotify, MenuNotify, ManagerCreateNotify {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Manager manager = dao.read(textId.getText());
+				String password = new String (textPassword.getPassword());
 				if (manager == null) { 
 					JOptionPane.showMessageDialog(frame, "일치하는 아이디가 없습니다.", "로그인 실패", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
-				if (!manager.getPassword().equals(textPassword.getText())) {
+				if (!manager.getPassword().equals(password)) {
 					JOptionPane.showMessageDialog(frame, "비밀번호가 일치하지 않습니다.", "로그인 실패", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
