@@ -115,16 +115,9 @@ public class KioskMain implements LoginNotify, MenuNotify, ManagerCreateNotify {
 		btnLogin.setBounds(425, 184, 172, 78);
 		btnLogin.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
 		
-		btnSimpleLogin = new JButton("임시로그인");
-		btnSimpleLogin.setBounds(12, 10, 172, 84);
-		btnSimpleLogin.addActionListener(e -> {
-			KioskManage.showManageMenu(frame, KioskMain.this);
-			});
-		btnSimpleLogin.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(lblManagerPassword);
 		frame.getContentPane().add(lblManagerId);
-		frame.getContentPane().add(btnSimpleLogin);
 		frame.getContentPane().add(textPassword);
 		frame.getContentPane().add(textId);
 		frame.getContentPane().add(btnLogin);
